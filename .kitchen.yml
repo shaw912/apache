@@ -1,6 +1,6 @@
 ---
 driver:
-  name: vagrant
+  name: ec2
 
 provisioner:
   name: chef_zero
@@ -9,8 +9,24 @@ verifier:
   name: inspec
 
 platforms:
-  - name: ubuntu-16.04
   - name: centos-7.2
+    driver:
+      name: ec2
+      aws_ssh_key_id: chef
+      region: ap-southeast-2
+      availability_zone: b
+      subnet_id: subnet-80ae95e4
+      instance_type: t2.micro
+      image_id: ami-34171d57
+      security_group_ids: ['sg-96e7e8f1']
+      retryable_tries: 120
+      associate_public_ip: true
+
+    transport:
+      ssh_key: ~/chef.pem
+      connection_timeout: 10
+      connection_retries: 5
+      username: centos
 
 suites:
   - name: default
